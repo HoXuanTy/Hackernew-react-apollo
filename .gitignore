@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-server
 # testing
 /coverage
 
@@ -21,3 +20,6 @@ server
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+#folder
+/server
