@@ -14,7 +14,6 @@ import { BrowserRouter } from "react-router-dom";
 import {setContext} from '@apollo/client/link/context';
 import { API_URL, AUTH_TOKEN } from "./constans";
 
-
 const httpLink = createHttpLink({
   uri: API_URL,
 });

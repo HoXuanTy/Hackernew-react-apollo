@@ -17,7 +17,6 @@ const CreateLink = () => {
     onCompleted: () => navigate('/')
   })
 
-
   return (
     <div>
       <form

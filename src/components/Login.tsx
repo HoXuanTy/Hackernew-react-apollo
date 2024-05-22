@@ -10,7 +10,6 @@ const Login = () => {
 
   const [isLogin, setIsLogin] = useState(true);
 
-
   const [formState, setFormState] = useState({
     email: "",
     password: "",
