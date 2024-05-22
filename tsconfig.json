@@ -17,7 +17,9 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitThis": true,
-    "alwaysStrict": true  ,                 
+    "alwaysStrict": true  ,  
+                   
   },
-  "include": ["src"]   
+  "include": ["./src/**/*.tsx", "./src/**/*.ts", "src/jest.config.ts"] 
+  
 }

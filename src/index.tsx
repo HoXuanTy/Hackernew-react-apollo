@@ -10,13 +10,13 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { BrowserRouter } from "react-router-dom";
-import { AUTH_TOKEN } from "./constants";
 
-import {setContext} from '@apollo/client/link/context'
+import {setContext} from '@apollo/client/link/context';
+import { API_URL, AUTH_TOKEN } from "./constans";
 
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:4000",
+  uri: API_URL,
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -2,8 +2,9 @@ interface LinkProps {
     id: string,
     url: string,
     description: string,
-    postedBy:User,
-    votes:[Vote]
+    postedBy: User,
+    votes: Vote[],
+    createdAt: Date
 }
 
 interface Vote  {

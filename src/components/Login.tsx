@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { AUTH_TOKEN } from "../constants";
-
 import { useMutation } from "@apollo/client";
 import { LOGIN_MUTATION, SIGNUP_MUTATION } from "../graphql/mutations";
+import { AUTH_TOKEN } from "../constans";
 
 const Login = () => {
-
   const navigate = useNavigate();
 
+  const [isLogin, setIsLogin] = useState(true);
+
+
   const [formState, setFormState] = useState({
-    login: true,
     email: "",
     password: "",
     name: "",
@@ -19,31 +19,30 @@ const Login = () => {
 
   const [login] = useMutation(LOGIN_MUTATION, {
     variables: {
-        email: formState.email,
-        password: formState.password
+      email: formState.email,
+      password: formState.password,
     },
     onCompleted: ({ login }) => {
-        localStorage.setItem(AUTH_TOKEN, login.token);
-        navigate('/');
-      }
-  })
+      localStorage.setItem(AUTH_TOKEN, login.token);
+      navigate("/");
+    },
+  });
 
   const [signup] = useMutation(SIGNUP_MUTATION, {
     variables: {
-        ...formState
+      ...formState,
     },
-    onCompleted: ({signup}) => {
-        localStorage.setItem(AUTH_TOKEN, signup.token)
-        navigate('/')
-    }
-  })
-
+    onCompleted: ({ signup }) => {
+      localStorage.setItem(AUTH_TOKEN, signup.token);
+      navigate("/");
+    },
+  });
 
   return (
     <div>
-      <h4 className="mv3">{formState.login ? "Login" : "Sign Up"}</h4>
+      <h4 className="mv3">{isLogin ? "Login" : "Sign Up"}</h4>
       <div className="flex flex-column">
-        {!formState.login && (
+        {!isLogin && (
           <input
             value={formState.name}
             onChange={(e) =>
@@ -82,22 +81,15 @@ const Login = () => {
       <div className="flex mt3">
         <button
           className="pointer mr2 button"
-          onClick={() => formState.login ? login() : signup()}
+          onClick={() => (isLogin ? login() : signup())}
         >
-          {formState.login ? "login" : "create account"}
+          {isLogin ? "login" : "create account"}
         </button>
         <button
           className="pointer button"
-          onClick={(e) =>
-            setFormState({
-              ...formState,
-              login: !formState.login,
-            })
-          }
+          onClick={(e) => setIsLogin(!isLogin)}
         >
-          {formState.login
-            ? "need to create an account?"
-            : "already have an account?"}
+          {isLogin ? "need to create an account?" : "already have an account?"}
         </button>
       </div>
     </div>
