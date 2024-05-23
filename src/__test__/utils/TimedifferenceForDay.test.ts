@@ -44,12 +44,19 @@ describe('test time difference for day', () => {
             expect(result).toBe('1 week ago');
         })
 
-        test('should return "2 month ago" when the time is month hours ago', () => {
+        test('should return "2 month ago" when the time is 2 month hours ago', () => {
             const currentDate = new Date();
             currentDate.setMonth(currentDate.getMonth() - 2)
             const result = timeDifferenceForDay(currentDate);
             expect(result).toBe('2 month ago');
         })
 
+        test('should return "12 month ago" when the time is 1 years ago', () => {
+            const currentDate = new Date();
+            currentDate.setFullYear(currentDate.getFullYear() - 1)
+            const result = timeDifferenceForDay(currentDate);
+            expect(result).toBe('12 month ago')
+            
+        })
 
 })
