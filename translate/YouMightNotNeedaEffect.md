@@ -27,7 +27,7 @@ Bạn cần Effect để đồng bộ với bên ngoài hệ thống. Ví dụ, 
 
 Giả sử bạn có một component với hai biến trạng thái: firstName và lastName. Bạn muốn tính toán fullName từ chúng bằng cách nối chúng lại với nhau. Tuy nhiên, bạn muốn fullName nó cập nhật mỗi khi firstName hoặc lastName thay đổi. Bản năng đầu tiên của bạn có thể là thêm fullName vào biến state và cập nhật nó trong một Effect:
 
-    ```js
+```js
     function Form() {
     const [firstName, setFirstName] = useState('Taylor');
     const [lastName, setLastName] = useState('Swift');
@@ -39,10 +39,10 @@ Giả sử bạn có một component với hai biến trạng thái: firstName v
     }, [firstName, lastName]);
     // ...
     }
-    ```
+```
 Điều này phức tạp hơn mức cần thiết. Nó cũng không hiệu quả: Nó render toàn bộ giá trị cũ cho fullName, sau đó ngay lập tức (immediately)  re-render với giá trị cập nhật. Loại bỏ biến state và Effect:
   
-    ```js
+```js
     function Form() {
     const [firstName, setFirstName] = useState('Taylor');
     const [lastName, setLastName] = useState('Swift');
@@ -50,7 +50,7 @@ Giả sử bạn có một component với hai biến trạng thái: firstName v
     const fullName = firstName + ' ' + lastName;
     // ...
     }
-    ```
+```
 
 **Khi một thứ gì đó đã được tính toán từ props hoặc state đã tồn tại, đừng đặt nó vào trong state. Thay vào đó, tính toán nó trong quá trình rendering.** Điều này đảm bảo code của bạn nhanh hơn( bạn tránh được các cập nhật “cascading”), đơn giản hơn (bạn loại ỏ một vài đoạn code), và ít bị dễ bị lỗi hơn(bạn tránh được các lỗi do các biến trạng thái khác nhau không đồng bộ với nhau). Nếu cách tiếp cận này có vẻ mới mẻ đối với bạn, Suy nghĩ trong React sẽ giải thích những gì nên go into state.
 
