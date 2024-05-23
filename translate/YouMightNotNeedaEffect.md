@@ -54,7 +54,67 @@ Giả sử bạn có một component với hai biến trạng thái: firstName v
 
 **Khi một thứ gì đó đã được tính toán từ props hoặc state đã tồn tại, đừng đặt nó vào trong state. Thay vào đó, tính toán nó trong quá trình rendering.** Điều này đảm bảo code của bạn nhanh hơn( bạn tránh được các cập nhật “cascading”), đơn giản hơn (bạn loại ỏ một vài đoạn code), và ít bị dễ bị lỗi hơn(bạn tránh được các lỗi do các biến trạng thái khác nhau không đồng bộ với nhau). Nếu cách tiếp cận này có vẻ mới mẻ đối với bạn, Suy nghĩ trong React sẽ giải thích những gì nên go into state.
 
+# Các phép tính tốn kém bộ nhớ đệm
 
+Component này tính toán *visibleTodos* bằng cách lấy *todos* mà nó nhận được từ props và lọc chúng theo *filter* prop. Bạn có thể cảm thấy muốn lưu trữ kết quả trong state và cập nhật nó trong Effect:
 
+```js
+    function TodoList({ todos, filter }) {
+    const [newTodo, setNewTodo] = useState('');
 
+    // 🔴 Avoid: redundant state and unnecessary Effect
+    const [visibleTodos, setVisibleTodos] = useState([]);
+    useEffect(() => {
+        setVisibleTodos(getFilteredTodos(todos, filter));
+    }, [todos, filter]);
 
+    // ...
+    }
+```
+
+Như ví dụ trước, cả hai cái này đều không cần thiết và không hiệu quả (inefficient). Đầu tiên hãy loại bỏ state và Effect:
+
+```js
+    function TodoList({ todos, filter }) {
+    const [newTodo, setNewTodo] = useState('');
+    // ✅ This is fine if getFilteredTodos() is not slow.
+    const visibleTodos = getFilteredTodos(todos, filter);
+    // ...
+    }
+```
+Thông thường, thì code này ổn! Nhưng có thể ===getFilteredTodos()=== nó chậm hoặc bạn có nhiều *todos*. Trong trường hợp đó bạn không muốn tính toán ===getFiteredTodos()=== if một vài unrelated biến trạng thái như newTodo có thay đổi.
+
+Bạn có thể lưu vào bộ nhớ đệm (hoặc "memoize") một phép tính tốn kém bằng cách bọc nó trong useMemo hook:
+
+```js
+    import { useMemo, useState } from 'react';
+
+    function TodoList({ todos, filter }) {
+    const [newTodo, setNewTodo] = useState('');
+    const visibleTodos = useMemo(() => {
+        // ✅ Does not re-run unless todos or filter change
+        return getFilteredTodos(todos, filter);
+    }, [todos, filter]);
+    // ...
+    }
+```
+Hoặc viết với một dòng:
+
+```js
+    import { useMemo, useState } from 'react';
+
+    function TodoList({ todos, filter }) {
+    const [newTodo, setNewTodo] = useState('');
+    // ✅ Does not re-run getFilteredTodos() unless todos or filter change
+    const visibleTodos = useMemo(() => getFilteredTodos(todos, filter), [todos, filter]);
+    // ...
+    }
+```
+
+Điều này cho React biết rằng bạn không muốn inner funtion chạy lại trừ khi *todos* hoặc *filter* có thay đổi. React sẽ ghi nhớ và trả về giá trị của *getFilterTodos()* trong quá trình lần đầu tiên render. Trong lần render tiếp theo, nó sẽ kiểm tra nếu *todos* hoặc *filter* là khác nhau. Nếu chúng giống với lần cuối cùng, *useMemo* sẽ trả về kết quả cuối cùng đã được lưu trữ. Nhưng nếu chúng khác nhau, React sẽ gọi lại inner function lần nữa (và lưu kết quả đó).
+
+Chức năng của bạn sẽ bọc trong useMemo và chạy trong quá trình rendering, vì vậy nó chỉ làm việc cho phép toán thuần túy.
+
+    ## Làm thế nào để biết một phếp toán có tốn kém không?
+    
+    Nói chung, trừ khi bạn tạo hoặc lặp qua hàng ngàn đối tượng, nó sẽ không tốn kém.
