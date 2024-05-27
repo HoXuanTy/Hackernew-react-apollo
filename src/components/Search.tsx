@@ -11,8 +11,6 @@ function Search() {
     FEED_SEARCH_QUERY
   );
 
-  console.log(executeSearch);
-  
   return (
     <div>
         <label>Search</label>

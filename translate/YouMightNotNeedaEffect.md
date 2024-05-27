@@ -82,7 +82,7 @@ Như ví dụ trước, cả hai cái này đều không cần thiết và khôn
     // ...
     }
 ```
-Thông thường, thì code này ổn! Nhưng có thể ===getFilteredTodos()=== nó chậm hoặc bạn có nhiều *todos*. Trong trường hợp đó bạn không muốn tính toán ===getFiteredTodos()=== if một vài unrelated biến trạng thái như newTodo có thay đổi.
+Thông thường, thì code này ổn! Nhưng có thể *getFilteredTodos()* nó chậm hoặc bạn có nhiều *todos*. Trong trường hợp đó bạn không muốn tính toán *getFiteredTodos()* if một vài unrelated biến trạng thái như newTodo có thay đổi.
 
 Bạn có thể lưu vào bộ nhớ đệm (hoặc "memoize") một phép tính tốn kém bằng cách bọc nó trong useMemo hook:
 
