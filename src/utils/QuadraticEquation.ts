@@ -1,6 +1,8 @@
 function quadraticEquation(a: number, b: number, c: number) {
-    let delta, x1, x2 : number
-   
+    let delta : number
+    let x1: number
+    let x2: number
+
     if(a === 0) {
         return 'It\'s not a quadratic equation'
     }

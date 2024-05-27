@@ -55,7 +55,7 @@ describe('test time difference for day', () => {
             const currentDate = new Date();
             currentDate.setFullYear(currentDate.getFullYear() - 1)
             const result = timeDifferenceForDay(currentDate);
-            expect(result).toBe('12 month ago')
+            expect(result).toBe('12 month ago');
             
         })
 
